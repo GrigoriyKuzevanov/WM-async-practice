@@ -30,10 +30,18 @@ class Settings(BaseSettings):
         "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
         "pk": "pk_%(table_name)s",
     }
-    
+
+    # Alembic configuration
+    SCRIPT_LOCATION: str = "parser/alembic"
+    VERSION_LOCATIONS: str = ""
+    FILE_TEMPLATE: str = (
+        "%%(year)d_%%(month).2d_%%(day).2d_%%(hour).2d%%(minute).2d-%%(rev)s_%%(slug)s"
+    )
+    TIMEZONE: str = "UTC"
+
     model_config = SettingsConfigDict(
         env_file=".env", env_ignore_empty=True, case_sensitive=True, extra="ignore"
     )
-    
+
 
 settings = Settings()
