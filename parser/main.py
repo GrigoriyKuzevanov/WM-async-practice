@@ -31,6 +31,7 @@ async def main() -> None:
     for page in pages:
         links.extend(get_links_from_page(page))
 
+    
     logging.info(msg="Start downloading bulletins files")
     
     async with ClientSession(timeout=aiohttp_timeout) as session:
@@ -39,12 +40,14 @@ async def main() -> None:
         ]
         await asyncio.gather(*tasks)
 
+    
     logging.info(msg="Start parsing xls files")
     
     data = []
     for date, _ in links:
         data.append(parse_xls_bulletin_to_dict(date))
 
+    
     logging.info(msg="Start saving data to database")
     
     tasks = [asyncio.create_task(save_bulletin_to_db(item)) for item in data]
