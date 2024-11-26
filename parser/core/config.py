@@ -1,15 +1,19 @@
+import os
 from pydantic import PostgresDsn, computed_field
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    # Database settings
     DB_USER: str
     DB_PASSWORD: str
     DB_HOST: str
     DB_PORT: int
     DB_NAME: str
     ECHO_SQL: bool
+    POOL_SIZE: int = 20
+    MAX_OVERFLOW: int = 10
 
     @computed_field
     @property
@@ -39,6 +43,15 @@ class Settings(BaseSettings):
     )
     TIMEZONE: str = "UTC"
 
+    # Spimex parse settings
+    BASE_URL: str = "https://spimex.com"
+    TRADE_RESULTS_URL: str = "https://spimex.com/markets/oil_products/trades/results"
+    DOWNLOAD_DIR: str = "downloads"
+    AIOHTTP_TIMEOUT_TOTAL: int = 15
+    START_PAGE: int = 1
+    END_PAGE: int = 5
+    
+    
     model_config = SettingsConfigDict(
         env_file=".env", env_ignore_empty=True, case_sensitive=True, extra="ignore"
     )
