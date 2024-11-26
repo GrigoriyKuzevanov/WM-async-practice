@@ -4,7 +4,10 @@ from parser.core.config import settings
 
 
 engine = create_async_engine(
-    settings.asyncpg_url.unicode_string(), echo=settings.ECHO_SQL
+    settings.asyncpg_url.unicode_string(),
+    echo=settings.ECHO_SQL,
+    pool_size=settings.POOL_SIZE,
+    max_overflow=settings.MAX_OVERFLOW,
 )
 
 AsyncSessionFactory = async_sessionmaker(
