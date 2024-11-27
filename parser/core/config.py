@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     }
 
     # Alembic configuration
-    SCRIPT_LOCATION: str = "parser/alembic"
+    SCRIPT_LOCATION: str = "parser/migration_utils/alembic"
     VERSION_LOCATIONS: str = ""
     FILE_TEMPLATE: str = (
         "%%(year)d_%%(month).2d_%%(day).2d_%%(hour).2d%%(minute).2d-%%(rev)s_%%(slug)s"
