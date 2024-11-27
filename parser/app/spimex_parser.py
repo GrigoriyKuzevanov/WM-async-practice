@@ -26,13 +26,15 @@ def get_links_from_page(page_text: str, limit: int = 10) -> list[tuple[str, str]
 
     link_divs = bs.find_all("div", class_="accordeon-inner__item", limit=limit)
 
-    if link_divs:
-        for div in link_divs:
-            link_a = div.find("a", class_="accordeon-inner__item-title")
-            date_span = div.find("span")
+    if not link_divs:
+        return results
+    
+    for div in link_divs:
+        link_a = div.find("a", class_="accordeon-inner__item-title")
+        date_span = div.find("span")
 
-            if link_a and date_span:
-                results.append((date_span.text, settings.BASE_URL + link_a.get("href")))
+        if link_a and date_span:
+            results.append((date_span.text, settings.BASE_URL + link_a.get("href")))
 
     return results
 
