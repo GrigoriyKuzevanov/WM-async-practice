@@ -29,8 +29,9 @@ async def download_bulletins_xls(
         response.raise_for_status()
 
         if response.status == 200:
+            download_content = await response.read()
             try:
                 async with aiofiles.open(filename, "wb") as f:
-                    await f.write(await response.read())
+                    await f.write(download_content)
             except OSError as e:
                 logging.error(msg="Error during saving file", exc_info=e)
