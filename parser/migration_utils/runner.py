@@ -5,9 +5,12 @@ from alembic.config import CommandLine, Config
 
 
 def make_config() -> Config:
+    """Create and configurate Alembic config object using project settings.
+
+    Returns:
+        Config: Alembic Config object
     """
-    Создает и настривает объект конфигурации Alembic, используя настройки приложения.
-    """
+
 
     alembic_config = Config()
     alembic_config.set_main_option("script_location", settings.SCRIPT_LOCATION)
@@ -22,11 +25,10 @@ def make_config() -> Config:
 
 
 def alembic_runner(*args: Any) -> None:
-    """
-    Запускает Alembic c переданными аргументами командной строки и текущей конфигурацией.
-
+    """Runs Alembic with given command line args and current configuration.
+    
     Args:
-        args (Any): Аргументы командной строки
+        args (Any): Command line arguments.
     """
 
     cli = CommandLine()
