@@ -1,21 +1,24 @@
 import logging
 from functools import wraps
-from typing import Any, Callable
+from typing import Callable, TypeVar, ParamSpec
+
+R = TypeVar("R")
+P = ParamSpec("P")
 
 
-def bs4_exceptions_handler(func: Callable[..., Any]) -> Callable[..., Any]:
+def bs4_exceptions_handler(func: Callable[P, R]) -> Callable[P, R | None]:
     """Decorator to handle exceptions raised during parsing html pages using
     'BeautifulSoup' library
 
     Args:
-        func (Callable[..., Any]): Function or method performing parsing
+        func (Callable[P, R]): Function or method performing parsing
 
     Returns:
-        Callable[..., Any]: Wrapper with exception handling
+        Callable[P, R | None]: Wrapper with exception handling
     """
 
     @wraps(func)
-    def wrapper(*args: Any, **kwargs: Any) -> Any:
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R | None:
         try:
             return func(*args, **kwargs)
         except TypeError as e:

@@ -1,23 +1,26 @@
 import logging
 from functools import wraps
-from typing import Any, Awaitable, Callable
+from typing import Awaitable, Callable, TypeVar, ParamSpec
 
 import aiohttp
 import requests
 
+R = TypeVar("R")
+P = ParamSpec("P")
 
-def request_exceptions_handler(func: Callable[..., Any]) -> Callable[..., Any]:
+
+def request_exceptions_handler(func: Callable[P, R]) -> Callable[P, R | None]:
     """Decorator to handle exceptions raised during making HTTP requests with 'requests' library
 
     Args:
-        func (Callable[..., Any]): Function or method performing an http request
+        func (Callable[P, R]): Function or method performing an http request
 
     Returns:
-        Callable[..., Any]: Wrapper with exception handling
+        Callable[P, R | None]: Wrapper with exception handling
     """
 
     @wraps(func)
-    def wrapper(*args: Any, **kwargs: Any) -> Any:
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R | None:
         try:
             return func(*args, **kwargs)
         except requests.HTTPError as e:
@@ -29,18 +32,18 @@ def request_exceptions_handler(func: Callable[..., Any]) -> Callable[..., Any]:
 
 
 def async_request_exceptions_handler(
-    coro: Callable[..., Awaitable[Any]]
-) -> Callable[..., Awaitable[Any]]:
+    coro: Callable[P, Awaitable[R]]
+) -> Callable[P, Awaitable[R | None]]:
     """Decorator to handle exceptions raised during making async HTTP requests with "aiohttp" library
 
     Args:
-        coro (Callable[..., Awaitable[Any]]): Function or method performing an async http request
+        coro (Callable[P, Awaitable[R]]): Function or method performing an async http request
 
     Returns:
-        Callable[..., Awaitable[Any]]: Awaitable wrapper with exception handling
+        Callable[P, Awaitable[R | None]]: Awaitable wrapper with exception handling
     """
 
-    async def wrapper(*args: Any, **kwargs: Any) -> Any:
+    async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R | None:
         try:
             return await coro(*args, **kwargs)
         except aiohttp.ClientError as e:
